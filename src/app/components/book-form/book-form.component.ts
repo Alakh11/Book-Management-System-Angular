@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./book-form.component.css']
 })
 export class BookFormComponent {
+  book = { title: '', author: '', genre: '' };
 
+  submitForm() {
+    // Logic to add/edit a book
+    console.log(this.book);
+  }
 }
