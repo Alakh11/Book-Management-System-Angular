@@ -1,1 +1,8 @@
 <p>book-form works!</p>
+<form (ngSubmit)="submitForm()">
+    <input [(ngModel)]="book.title" placeholder="Title" required />
+    <input [(ngModel)]="book.author" placeholder="Author" required />
+    <input [(ngModel)]="book.genre" placeholder="Genre" required />
+    <button type="submit">Submit</button>
+  </form>
+  
