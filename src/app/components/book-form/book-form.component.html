@@ -1,8 +1,11 @@
 <p>book-form works!</p>
 <form (ngSubmit)="submitForm()">
-    <input [(ngModel)]="book.title" placeholder="Title" required />
-    <input [(ngModel)]="book.author" placeholder="Author" required />
-    <input [(ngModel)]="book.genre" placeholder="Genre" required />
+  <input formControlName="title" placeholder="Title" required />
+  <input formControlName="author" placeholder="Author" required />
+  <input formControlName="genre" placeholder="Genre" required />
+  <input formControlName="publishedYear" placeholder="Published Year" />
+  <input formControlName="isbn" placeholder="ISBN" />
+  
     <button type="submit">Submit</button>
   </form>
   
