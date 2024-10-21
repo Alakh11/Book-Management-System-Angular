@@ -1,15 +1,42 @@
-<p>book-list works!</p>
+
 <!-- book-list.component.html -->
-<div class="bg-gray-100 p-4 rounded-lg shadow-md text-white">
+<div class="bg-gray-300 p-4 rounded-lg shadow-md text-black">
     <h2 class="text-lg font-bold">Book List</h2>
     <ul>
       <li *ngFor="let book of books" class="mb-2">
         <h3>
-            {{ book.title }} by {{ book.author }} ({{ book.genre }}) 
-            published Year: {{ book.publishedYear || 'N/A' }} 
-            having ISBN: {{ book.isbn || 'N/A' }}
-          </h3>
+            {{ book.title }} by {{ book.author }} ({{ book.genre }}) </h3>
+            <p>published Year: {{ book.publishedYear || 'N/A' }} | ISBN: {{ book.isbn || 'N/A' }}
+            </p>
           
       </li>
     </ul>
   </div>
+
+  <!-- src/app/components/book-list/book-list.component.html -->
+<div class="book-list">
+  <h2>Book List</h2>
+  <input [(ngModel)]="searchQuery" placeholder="Searching for books..." />
+  <button (click)="searchBooks()">Search</button>
+
+  <h3>Searched Results</h3>
+  <ul *ngIf="searchResults.length > 0">
+    <li *ngFor="let book of searchResults">
+      <h4>{{ book.title }} by {{ book.author_name?.join(', ') }}</h4>
+      <p>Published Year: {{ book.first_publish_year || 'N/A' }}</p>
+      <p>ISBN: {{ book.isbn?.[0] || 'N/A' }}</p>
+    </li>
+  </ul>
+  <ul *ngIf="searchResults.length === 0 && searchQuery">
+    <li>No results found for "{{ searchQuery }}".</li>
+  </ul>
+
+  <h3>Your Books</h3>
+  <ul>
+    <li *ngFor="let book of books">
+      <h3>{{ book.title }} by {{ book.author }} ({{ book.genre }})</h3>
+      <p>Published Year: {{ book.publishedYear || 'N/A' }} | ISBN: {{ book.isbn || 'N/A' }}</p>
+      
+    </li>
+  </ul>
+</div>
