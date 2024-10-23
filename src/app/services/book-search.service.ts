@@ -7,7 +7,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class BookSearchService {
-  private apiUrl = 'https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=AIzaSyCac6ljbdZVZXukJ6L3U5klaDM5_Yg8fYE';
+  private apiUrl = 'https://www.googleapis.com/books/v1/volumes';
   searchQuery: any;
   bookSearchService: any;
   searchResults: never[] | undefined;
@@ -16,21 +16,19 @@ export class BookSearchService {
   constructor(private http: HttpClient) {}
 
   searchBooks(query: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?q=${encodeURIComponent(query)}`);
-    if (this.searchQuery.trim()) {
-      this.bookSearchService.searchBooks(this.searchQuery).subscribe((data: { docs: never[]; }) => {
-        this.searchResults = data.docs || []; // Default to empty array if docs is undefined
-      }, (error: any) => {
-        console.error('Search Error:', error); // Log errors if the API call fails
+    if (!query.trim()) {
+      return new Observable(observer => {
+        observer.next([]);
+        observer.complete();
       });
-    } else {
-      this.searchResults = [];
     }
 
-    const url = `${this.apiUrl}?q=${encodeURIComponent(query)}`;
+    const url = `${this.apiUrl}?q=${encodeURIComponent(query)}&key=AIzaSyCac6ljbdZVZXukJ6L3U5klaDM5_Yg8fYE`;
     console.log('API Call:', url); // Log the URL being called
+    
     return this.http.get<any>(url).pipe(
       tap(data => console.log('API Response:', data)) // Log the response
     );
   }
 }
+
