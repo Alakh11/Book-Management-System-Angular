@@ -1,6 +1,6 @@
 {
     "/api": {
-      "target": "https://openlibrary.org",
+      "target": "",
       "secure": true,
       "changeOrigin": true,
       "logLevel": "debug",

@@ -1,11 +1,67 @@
+<div class="container">
+  <h2>Add a New Book</h2>
 
-<form [formGroup]="bookForm"  (ngSubmit)="submitForm()">
-  <input formControlName="title" placeholder="Title" required />
-  <input formControlName="author" placeholder="Author" required />
-  <input formControlName="genre" placeholder="Genre" required />
-  <input formControlName="publishedYear" placeholder="Published Year"  type ="date"/>
-  <input formControlName="isbn" placeholder="ISBN" type="number" />
-  
-    <button type="submit">Submit</button>
-    
+  <!-- Display message for success or error -->
+  <div *ngIf="message" class="alert" [ngClass]="{ 'alert-success': message.includes('successfully'), 'alert-danger': message.includes('Failed') }">
+    {{ message }}
+  </div>
+
+  <!-- Book Form -->
+  <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input id="title" formControlName="title" class="form-control" />
+      <div *ngIf="f['title'].errors && f['title'].touched" class="text-danger">
+        Title is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input id="author" formControlName="author" class="form-control" />
+      <div *ngIf="f['author'].errors && f['author'].touched" class="text-danger">
+        Author is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="genre">Genre</label>
+      <input id="genre" formControlName="genre" class="form-control" />
+      <div *ngIf="f['genre'].errors && f['genre'].touched" class="text-danger">
+        Genre is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="publishedYear">Published Year</label>
+      <input id="publishedYear" formControlName="publishedYear" class="form-control" type ="date" />
+      <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-danger">
+        Published Year is required and should be a valid date.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="isbn">ISBN</label>
+      <input id="isbn" formControlName="isbn" class="form-control"  type = "number">
+      <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-danger">
+        ISBN is required and should be between 10 and 13 characters.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Book</button>
   </form>
+
+   <!-- Display added books -->
+   <h3 class="mt-4">Added Books</h3>
+   <ul *ngIf="books.length > 0" class="list-group">
+     <li *ngFor="let book of books" class="list-group-item">
+       <strong>Title:</strong> {{ book.title }} <br />
+       <strong>Author:</strong> {{ book.author }} <br />
+       <strong>Genre:</strong> {{ book.genre }} <br />
+       <strong>Published Year:</strong> {{ book.publishedYear }} <br />
+       <strong>ISBN:</strong> {{ book.isbn }}
+     </li>
+   </ul>
+ 
+   <p *ngIf="books.length === 0">No books added yet.</p>
+</div>

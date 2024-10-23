@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     BookListComponent,
     BookFormComponent,
-    
   ],
   imports: [
     BrowserModule,
