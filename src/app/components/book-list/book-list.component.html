@@ -3,7 +3,9 @@
   <h2 class="text-lg font-bold">Book List</h2>
 
   <!-- Search Input -->
-  <input [(ngModel)]="searchQuery" placeholder="Searching for books..." class="p-2 mb-2 border border-gray-500 rounded"/>
+  <input [(ngModel)]="searchQuery"
+   placeholder="Searching for books..."
+   class="p-2 mb-2 border border-gray-500 rounded"/>
   <button (click)="searchBooks()" class="p-2 bg-blue-500 text-white rounded">Search</button>
 
   <!-- Loading Indicator -->
@@ -16,14 +18,16 @@
     {{ errorMessage }}
   </div>
 
-  <!-- Searched Results -->
-  <h3>Searched Results</h3>
-  <ul *ngIf="searchResults.length > 0">
-    <li *ngFor="let book of searchResults" class="mb-2">
-      <h4>{{ book.title }} by {{ book.author_name?.join(', ') }}</h4>
-      <p>Published Year: {{ book.first_publish_year || 'N/A' }}</p>
-      <p>ISBN: {{ book.isbn?.[0] || 'N/A' }}</p>
-    </li>
+   <!-- Searched Results -->
+   <h3 class="mt-4">Searched Results</h3>
+   <ul *ngIf="searchResults && searchResults.length > 0">
+     <li *ngFor="let book of searchResults" class="mb-2">
+      <strong>Title:</strong> {{ book.title }} <br>
+      <strong>Author(s):</strong> {{ book.author_name }} <br>
+      <strong>First Published:</strong> {{ book.first_publish_year }} <br>
+      <strong>ISBN:</strong> {{ book.isbn }}
+      <hr>
+     </li>
   </ul>
 
   <!-- No Results Found -->
@@ -39,4 +43,5 @@
       <p>Published Year: {{ book.publishedYear || 'N/A' }} | ISBN: {{ book.isbn || 'N/A' }}</p>
     </li>
   </ul>
+  <p *ngIf="books.length === 0">You have no added books.</p>
 </div>

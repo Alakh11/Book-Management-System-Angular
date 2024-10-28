@@ -6,6 +6,20 @@
     {{ message }}
   </div>
 
+ 
+
+<!-- Display Search Results -->
+<h3>Search Results</h3>
+<ul *ngIf="searchResults.length > 0" class="list-group">
+  <li *ngFor="let book of searchResults" class="list-group-item">
+    <strong>Title:</strong> {{ book.title }} <br />
+    <strong>Author:</strong> {{ book.author_name ? book.author_name.join(', ') : 'Unknown' }} <br />
+    <strong>First Publish Year:</strong> {{ book.first_publish_year }} <br />
+    <button class="btn btn-primary" (click)="addBookFromSearch(book)">Add Book</button>
+  </li>
+</ul>
+
+
   <!-- Book Form -->
   <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
     <div class="form-group">
