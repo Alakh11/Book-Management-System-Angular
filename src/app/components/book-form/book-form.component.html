@@ -1,83 +1,82 @@
-<div class="container">
-  <h2>Add a New Book</h2>
+<div class="max-w-3xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+  <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">Add a New Book</h2>
 
   <!-- Display message for success or error -->
-  <div *ngIf="message" class="alert" [ngClass]="{ 'alert-success': message.includes('successfully'), 'alert-danger': message.includes('Failed') }">
+  <div *ngIf="message" 
+       class="p-3 mb-4 rounded-lg"
+       [ngClass]="{ 'bg-green-100 text-green-700': message.includes('successfully'), 'bg-red-100 text-red-700': message.includes('Failed') }">
     {{ message }}
   </div>
 
- 
-
-<!-- Display Search Results -->
-<h3>Search Results</h3>
-<ul *ngIf="searchResults.length > 0" class="list-group">
-  <li *ngFor="let book of searchResults" class="list-group-item">
-    <strong>Title:</strong> {{ book.title }} <br />
-    <strong>Author:</strong> {{ book.author_name ? book.author_name.join(', ') : 'Unknown' }} <br />
-    <strong>First Publish Year:</strong> {{ book.first_publish_year }} <br />
-    <button class="btn btn-primary" (click)="addBookFromSearch(book)">Add Book</button>
-  </li>
-</ul>
-
+  <!-- Display Search Results -->
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Search Results</h3>
+  <ul *ngIf="searchResults.length > 0" class="space-y-4">
+    <li *ngFor="let book of searchResults" class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+      <p><strong>Title:</strong> {{ book.title }}</p>
+      <p><strong>Author:</strong> {{ book.author_name ? book.author_name.join(', ') : 'Unknown' }}</p>
+      <p><strong>First Publish Year:</strong> {{ book.first_publish_year }}</p>
+      <button (click)="addBookFromSearch(book)" 
+              class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">
+        Add Book
+      </button>
+    </li>
+  </ul>
 
   <!-- Book Form -->
-  <form [formGroup]="bookForm" (ngSubmit)="submitForm()">
-    <div class="form-group">
-      <label for="title">Title</label>
-      <input id="title" formControlName="title" class="form-control" />
-      <div *ngIf="f['title'].errors && f['title'].touched" class="text-danger">
-        Title is required.
-      </div>
+  <form [formGroup]="bookForm" (ngSubmit)="submitForm()" class="space-y-4 mt-6">
+    <div>
+      <label for="title" class="block text-gray-600 font-semibold">Title</label>
+      <input id="title" formControlName="title" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <div *ngIf="f['title'].errors && f['title'].touched" class="text-red-600 text-sm mt-1">Title is required.</div>
     </div>
 
-    <div class="form-group">
-      <label for="author">Author</label>
-      <input id="author" formControlName="author" class="form-control" />
-      <div *ngIf="f['author'].errors && f['author'].touched" class="text-danger">
-        Author is required.
-      </div>
+    <div>
+      <label for="author" class="block text-gray-600 font-semibold">Author</label>
+      <input id="author" formControlName="author" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <div *ngIf="f['author'].errors && f['author'].touched" class="text-red-600 text-sm mt-1">Author is required.</div>
     </div>
 
-    <div class="form-group">
-      <label for="genre">Genre</label>
-      <input id="genre" formControlName="genre" class="form-control" />
-      <div *ngIf="f['genre'].errors && f['genre'].touched" class="text-danger">
-        Genre is required.
-      </div>
+    <div>
+      <label for="genre" class="block text-gray-600 font-semibold">Genre</label>
+      <input id="genre" formControlName="genre" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <div *ngIf="f['genre'].errors && f['genre'].touched" class="text-red-600 text-sm mt-1">Genre is required.</div>
     </div>
 
-    <div class="form-group">
-      <label for="publishedYear">Published Year</label>
-      <input id="publishedYear" formControlName="publishedYear" class="form-control" type ="date" />
-      <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-danger">
-        Published Year is required and should be a valid date.
-      </div>
+    <div>
+      <label for="publishedYear" class="block text-gray-600 font-semibold">Published Year</label>
+      <input id="publishedYear" formControlName="publishedYear" type="date" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-red-600 text-sm mt-1">Published Year is required and should be a valid date.</div>
     </div>
 
-    <div class="form-group">
-      <label for="isbn">ISBN</label>
-      <input id="isbn" formControlName="isbn" class="form-control"  type = "number">
-      <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-danger">
-        ISBN is required and should be between 10 and 13 characters.
-      </div>
+    <div>
+      <label for="isbn" class="block text-gray-600 font-semibold">ISBN</label>
+      <input id="isbn" formControlName="isbn" type="number" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-red-600 text-sm mt-1">ISBN is required and should be between 10 and 13 characters.</div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Add Book</button>
+    <button type="submit" class="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">Add Book</button>
   </form>
 
-   <!-- Display added books -->
-   <h3 class="mt-4">Added Books</h3>
-   <ul *ngIf="books.length > 0" class="list-group">
-     <li *ngFor="let book of books" class="list-group-item">
-       <strong>Title:</strong> {{ book.title }} <br />
-       <strong>Author:</strong> {{ book.author }} <br />
-       <strong>Genre:</strong> {{ book.genre }} <br />
-       <strong>Published Year:</strong> {{ book.publishedYear }} <br />
-       <strong>ISBN:</strong> {{ book.isbn }}
-       <button class="btn btn-warning btn-sm float-right" (click)="editBook(book)">Edit</button>
-      <button class="btn btn-danger btn-sm float-right mr-2" (click)="deleteBook(book.id)">Delete</button>
-     </li>
-   </ul>
- 
-   <p *ngIf="books.length === 0">No books added yet.</p>
+  <!-- Display added books -->
+  <h3 class="text-lg font-semibold text-gray-700 mt-6 mb-4">Added Books</h3>
+  <ul *ngIf="books.length > 0" class="space-y-4">
+    <li *ngFor="let book of books" class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+      <p><strong>Title:</strong> {{ book.title }}</p>
+      <p><strong>Author:</strong> {{ book.author }}</p>
+      <p><strong>Genre:</strong> {{ book.genre }}</p>
+      <p><strong>Published Year:</strong> {{ book.publishedYear }}</p>
+      <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+      <div class="flex space-x-2 mt-2">
+        <button (click)="editBook(book)" 
+                class="px-4 py-1 bg-yellow-500 text-white font-semibold rounded hover:bg-yellow-600 transition">
+          Edit
+        </button>
+        <button (click)="deleteBook(book.id)" 
+                class="px-4 py-1 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition">
+          Delete
+        </button>
+      </div>
+    </li>
+  </ul>
+  <p *ngIf="books.length === 0" class="text-center text-gray-500 mt-4">No books added yet.</p>
 </div>

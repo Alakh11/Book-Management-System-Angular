@@ -1,47 +1,61 @@
-<!-- book-list.component.html -->
-<div class="bg-gray-300 p-4 rounded-lg shadow-md text-black">
-  <h2 class="text-lg font-bold">Book List</h2>
+<div class="bg-gray-100 p-6 rounded-lg shadow-lg text-gray-800 max-w-3xl mx-auto">
+  <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">Book List</h2>
 
   <!-- Search Input -->
-  <input [(ngModel)]="searchQuery"
-   placeholder="Searching for books..."
-   class="p-2 mb-2 border border-gray-500 rounded"/>
-  <button (click)="searchBooks()" class="p-2 bg-blue-500 text-white rounded">Search</button>
+  <div class="flex items-center space-x-2 mb-4">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="Searching for books..."
+      class="flex-1 p-2 border border-gray-400 rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
+    />
+    <button
+      (click)="searchBooks()"
+      class="p-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+    >
+      Search
+    </button>
+  </div>
 
   <!-- Loading Indicator -->
-  <div *ngIf="loading" class="text-blue-600 font-semibold mt-2">
+  <div *ngIf="loading" class="text-blue-600 font-semibold text-center mb-4">
     Searching for books, please wait...
   </div>
 
   <!-- Error Message -->
-  <div *ngIf="errorMessage" class="text-red-600 font-semibold mt-2">
+  <div *ngIf="errorMessage" class="text-red-600 font-semibold text-center mb-4">
     {{ errorMessage }}
   </div>
 
-   <!-- Searched Results -->
-   <h3 class="mt-4">Searched Results</h3>
-   <ul *ngIf="searchResults && searchResults.length > 0">
-     <li *ngFor="let book of searchResults" class="mb-2">
-      <strong>Title:</strong> {{ book.title }} <br>
-      <strong>Author(s):</strong> {{ book.author_name }} <br>
-      <strong>First Published:</strong> {{ book.first_publish_year }} <br>
-      <strong>ISBN:</strong> {{ book.isbn }}
-      <hr>
-     </li>
-  </ul>
+  <!-- Searched Results -->
+  <div *ngIf="searchResults && searchResults.length > 0" class="mt-6">
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">Searched Results</h3>
+    <ul class="space-y-4">
+      <li *ngFor="let book of searchResults" class="p-4 border border-gray-400 rounded-lg bg-white shadow-sm">
+        <p><strong>Title:</strong> {{ book.title }}</p>
+        <p><strong>Author(s):</strong> {{ book.author_name || 'Unknown' }}</p>
+        <p><strong>First Published:</strong> {{ book.first_publish_year || 'Unknown' }}</p>
+        <p><strong>ISBN:</strong> {{ book.isbn || 'N/A' }}</p>
+      </li>
+    </ul>
+  </div>
 
   <!-- No Results Found -->
-  <ul *ngIf="searchResults.length === 0 && searchQuery && !loading && !errorMessage">
-    <li>No results found for "{{ searchQuery }}".</li>
-  </ul>
+  <div *ngIf="searchResults.length === 0 && searchQuery && !loading && !errorMessage" class="text-center text-gray-500 mt-4">
+    No results found for "{{ searchQuery }}".
+  </div>
 
   <!-- Local Books -->
-  <h3>Your Books</h3>
-  <ul>
-    <li *ngFor="let book of books" class="mb-2">
-      <h4>{{ book.title }} by {{ book.author }} ({{ book.genre }})</h4>
-      <p>Published Year: {{ book.publishedYear || 'N/A' }} | ISBN: {{ book.isbn || 'N/A' }}</p>
-    </li>
-  </ul>
-  <p *ngIf="books.length === 0">You have no added books.</p>
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">Your Books</h3>
+    <ul *ngIf="books.length > 0" class="space-y-4">
+      <li *ngFor="let book of books" class="p-4 border border-blue-300 rounded-lg bg-white shadow-sm">
+        <h4 class="text-gray-800 font-bold">{{ book.title }}</h4>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Genre:</strong> {{ book.genre }}</p>
+        <p><strong>Published Year:</strong> {{ book.publishedYear || 'N/A' }}</p>
+        <p><strong>ISBN:</strong> {{ book.isbn || 'N/A' }}</p>
+      </li>
+    </ul>
+    <p *ngIf="books.length === 0" class="text-center text-gray-500">You have no added books.</p>
+  </div>
 </div>
