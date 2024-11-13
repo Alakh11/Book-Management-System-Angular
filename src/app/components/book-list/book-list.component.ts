@@ -53,6 +53,7 @@ export class BookListComponent implements OnInit {
           this.searchResults = response.docs.map((item: any) => ({
             title: item.title,
             author_name: Array.isArray(item.author_name) ? item.author_name.join(', ') : 'Unknown',
+            genre: item.genre,
             first_publish_year: item.first_publish_year,
             isbn: item.isbn ? item.isbn[0] : 'Unknown'
           }));

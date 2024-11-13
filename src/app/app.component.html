@@ -1,27 +1,26 @@
 
 <div class="container mx-auto p-6 bg-white min-h-screen">
-  
-  
 
 <div class="flex min-h-screen bg-accent">
   <!-- Sidebar -->
-  <aside class="w-64 bg-gray-100 text-black">
-    <div class="p-6 text-center text-xl font-semibold border-b border-light">
+  <aside class="w-64 bg-white text-black shadow-md">
+    <div class="p-6 text-center text-xl font-medium border-b border-light bg-red-50">
     Dashboard
     </div>
     <nav class="mt-4 space-y-2">
-      <a routerLink="/books" class="block px-4 py-2 rounded-lg text-lg text-primary font-medium hover:bg-cyan-500 hover:bg-opacity-50">Books</a>
+      <a routerLink="/Books" class="block px-4 py-2 rounded-lg text-lg text-primary font-medium hover:bg-cyan-500 hover:bg-opacity-50">Books📚</a>
       <a routerLink="/add-book" class="block px-4 py-2 rounded-lg text-lg text-primary font-medium hover:bg-cyan-500 hover:bg-opacity-50">Add Book</a>
     </nav>
   </aside>
 
   <!-- Main Content -->  
-  <div class="flex-grow p-8 mx-auto max-w-4xl">
+  <div class="flex-grow p-8 mx-auto max-w-4xl ">
     <header class="flex place-items-center justify-between mb-8">
-      <h1 class="text-4xl font-bold text-right text-black mb-5 ml-40">Book Management System</h1>
-      <div class="text-dark text-sm opacity-75">Welcome</div>
+      <h1 class="text-4xl font-bold text-right text-black mb-5 ml-48">Book Management System</h1>
+      <div class="text-red-900 text-sm opacity-75">Welcome🙏</div>
     </header>
     <router-outlet></router-outlet>
   </div>
 </div>
+
 </div>

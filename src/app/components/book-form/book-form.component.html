@@ -1,5 +1,5 @@
-<div class="max-w-3xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
-  <h2 class="text-2xl font-bold mb-6 text-gray-700 text-center">Add a New Book</h2>
+<div class="max-w-3xl mx-auto p-8 bg-white rounded-lg shadow-md mt-4">
+  <h2 class="text-2xl  font-semibold mb-6 text-dark text-center">Add a New Book</h2>
 
   <!-- Display message for success or error -->
   <div *ngIf="message" 
@@ -9,9 +9,9 @@
   </div>
 
   <!-- Display Search Results -->
-  <h3 class="text-lg font-semibold text-gray-700 mb-4">Search Results</h3>
+  
   <ul *ngIf="searchResults.length > 0" class="space-y-4">
-    <li *ngFor="let book of searchResults" class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+    <li *ngFor="let book of searchResults" class="p-4 border border-gray-100 rounded-lg bg-white shadow-sm">
       <p><strong>Title:</strong> {{ book.title }}</p>
       <p><strong>Author:</strong> {{ book.author_name ? book.author_name.join(', ') : 'Unknown' }}</p>
       <p><strong>First Publish Year:</strong> {{ book.first_publish_year }}</p>
@@ -25,36 +25,36 @@
   <!-- Book Form -->
   <form [formGroup]="bookForm" (ngSubmit)="submitForm()" class="space-y-4 mt-6">
     <div>
-      <label for="title" class="block text-gray-600 font-semibold">Title</label>
-      <input id="title" formControlName="title" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <label for="title" class="block text-dark text-sm font-medium mb-1">Title</label>
+      <input id="title" formControlName="title" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder="Book Title" type="text"/>
       <div *ngIf="f['title'].errors && f['title'].touched" class="text-red-600 text-sm mt-1">Title is required.</div>
     </div>
 
     <div>
-      <label for="author" class="block text-gray-600 font-semibold">Author</label>
-      <input id="author" formControlName="author" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <label for="author" class="block text-sm text-dark font-medium mb-1">Author</label>
+      <input id="author" formControlName="author" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder="Author" type="text"/>
       <div *ngIf="f['author'].errors && f['author'].touched" class="text-red-600 text-sm mt-1">Author is required.</div>
     </div>
 
     <div>
-      <label for="genre" class="block text-gray-600 font-semibold">Genre</label>
-      <input id="genre" formControlName="genre" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <label for="genre" class="block text-dark text-sm mb-1 font-medium">Genre</label>
+      <input id="genre" formControlName="genre" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Genre" text="text"/>
       <div *ngIf="f['genre'].errors && f['genre'].touched" class="text-red-600 text-sm mt-1">Genre is required.</div>
     </div>
 
     <div>
-      <label for="publishedYear" class="block text-gray-600 font-semibold">Published Year</label>
-      <input id="publishedYear" formControlName="publishedYear" type="date" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <label for="publishedYear" class="block text-dark text-sm font-medium mb-1">Published Year</label>
+      <input id="publishedYear" formControlName="publishedYear" type="date" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Published Year" text="number"/>
       <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-red-600 text-sm mt-1">Published Year is required and should be a valid date.</div>
     </div>
 
     <div>
-      <label for="isbn" class="block text-gray-600 font-semibold">ISBN</label>
-      <input id="isbn" formControlName="isbn" type="number" class="w-full p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300"/>
+      <label for="isbn" class="block text-dark text-sm font-medium mb-1">ISBN</label>
+      <input id="isbn" formControlName="isbn" type="number" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "ISBN Number" text="text"/>
       <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-red-600 text-sm mt-1">ISBN is required and should be between 10 and 13 characters.</div>
     </div>
 
-    <button type="submit" class="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">Add Book</button>
+    <button type="submit" class="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-200 ease-in-out">Add Book</button>
   </form>
 
   <!-- Display added books -->
