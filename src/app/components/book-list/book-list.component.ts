@@ -10,7 +10,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./book-list.component.css']
 })
 export class BookListComponent implements OnInit {
-  books: Book[] = [];
+  books=[];
+  //books: Book[] = [];
   searchQuery: string = '';
   searchResults: any[] = [];
   apiUrl: string = 'https://openlibrary.org/search.json';
@@ -23,13 +24,39 @@ export class BookListComponent implements OnInit {
     this.getBooks();
   }
 
-  // Fetching books from a local source or service
   getBooks(): void {
+    this.http.get('http://localhost:5001/api/books')
+      .subscribe(
+        (data: any) => {
+          this.books = data;
+          console.log('Books:', this.books);
+        },
+        (error) => {
+          console.error('Error fetching books:', error);
+        }
+      );
+  }
+
+  addBook(book): void {
+    this.http.post('http://localhost:5001/api/books', book)
+      .subscribe(
+        (data) => {
+          console.log('New book added:', data);
+        },
+        (error) => {
+          console.error('Error adding book:', error);
+        }
+      );
+  }
+  
+
+  // Fetching books from a local source or service
+  /*getBooks(): void {
     const storedBooks = localStorage.getItem('books');
     if (storedBooks) {
       this.books = JSON.parse(storedBooks);
     }
-  }
+  }*/
 
   // Search for books using Open Library API
   searchBooks(): void {
