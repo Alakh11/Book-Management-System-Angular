@@ -17,6 +17,7 @@ export class BookFormComponent implements OnInit {
   searchResults: any[] = []; // Store search results
   //book: Book = { id: 0, title: '', author: '', genre: '', publishedYear: '', isbn: ''}; 
   editingBookId: number | null = null; // Track the ID of the book being edited
+  book = { id: '', title: '', author: '', category: '' };
 
 
   constructor(private fb: FormBuilder, private bookService: BookService) {
@@ -41,6 +42,13 @@ export class BookFormComponent implements OnInit {
         get f() { 
           return this.bookForm.controls;
          }
+
+         onSubmit() {
+          this.bookService.addBook(this.book).subscribe(response => {
+            console.log('Book added:', response);
+            // Handle response (e.g., show a success message)
+          });
+        }
 
 submitForm() {
   // Check if the form is valid before submitting
@@ -87,7 +95,7 @@ submitForm() {
   searchBooks(query: string) {
     if (query) {
       this.bookService.searchBooks(query).subscribe(response => {
-        this.searchResults = response.docs; // Assuming docs contains the array of books
+       // this.searchResults = response.docs; // Assuming docs contains the array of books
       }, error => {
         console.error('Error searching books:', error);
         this.message = 'Failed to fetch search results. Please try again.';

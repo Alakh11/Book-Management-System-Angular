@@ -1,8 +1,10 @@
+//book.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Book } from '../models/book.model';
+import { environment } from '../environements';
 
 export interface SearchResponse {
   docs: Book[];
@@ -13,7 +15,9 @@ export interface SearchResponse {
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = 'https://openlibrary.org/search.json';
+  private apiUrl = `${environment.apiBaseUrl}/books`;
+ // private apiUrl = 'http://localhost:5001/api/books';
+  //private apiUrl = 'https://openlibrary.org/search.json';
 
   // Subject to manage local books in memory
   private booksSubject = new BehaviorSubject<Book[]>([]);
@@ -21,6 +25,21 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
+   // Method to fetch all books
+   getBooks(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  // Method to add a new book
+  addBook(book: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, book);
+  }
+
+  // Method to search books by a query
+  searchBooks(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
+  }
+/*
   // Search books using Open Library API
   searchBooks(query: string): Observable<SearchResponse> {
     this.loadingSubject.next(true);
@@ -29,6 +48,7 @@ export class BookService {
       catchError(error => {
         this.loadingSubject.next(false);
         console.error('Error fetching books:', error);
+        alert(`Error: ${error.message}`);
         return of({ docs: [], num_found: 0 }); // Return a default value on error
       })
     );
@@ -45,7 +65,7 @@ export class BookService {
     book.id = this.generateId(); // Generate unique ID
     this.booksSubject.next([...currentBooks, book]);
   }
-
+  */
   // Delete a book from in-memory or local backend
   deleteBook(id: number): void {
     const currentBooks = this.booksSubject.value.filter(book => book.id !== id);

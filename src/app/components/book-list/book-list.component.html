@@ -60,7 +60,7 @@
           <th class="p-4 text-left font-medium">ISBN</th>
         </tr>
       </thead>
-     <!-- <tbody>
+      <tbody>
         <tr *ngFor="let book of books" class="border-b border-light hover:bg-accent transition ease-in-out duration-150">
           <td class="p-4">{{ book.title }}</td>
           <td class="p-4">{{ book.author }}</td>
@@ -68,7 +68,7 @@
           <td class="p-4">{{ book.publishedYear || 'N/A' }}</td>
           <td class="p-4">{{ book.isbn || 'N/A' }}</td>
         </tr>
-      </tbody>-->
+      </tbody>
     </table>
     <p *ngIf="books.length === 0" class="text-center text-gray-500">You have no added books.</p>
   </div>

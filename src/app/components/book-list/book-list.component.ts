@@ -10,59 +10,39 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./book-list.component.css']
 })
 export class BookListComponent implements OnInit {
-  books=[];
-  //books: Book[] = [];
+  books: Book[] = [];
   searchQuery: string = '';
   searchResults: any[] = [];
   apiUrl: string = 'https://openlibrary.org/search.json';
   loading: boolean = false; // Indicator for loading state
   errorMessage: string = ''; // For displaying error message
 
-  constructor(private http: HttpClient, private bookSearchService: BookSearchService, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private bookSearchService: BookSearchService, private cdr: ChangeDetectorRef, private bookService: BookService) {}
 
   ngOnInit(): void {
     this.getBooks();
+    this.bookService.getBooks().subscribe(data => {
+      this.books = data;
+    });
   }
-
-  getBooks(): void {
-    this.http.get('http://localhost:5001/api/books')
-      .subscribe(
-        (data: any) => {
-          this.books = data;
-          console.log('Books:', this.books);
-        },
-        (error) => {
-          console.error('Error fetching books:', error);
-        }
-      );
-  }
-
-  addBook(book): void {
-    this.http.post('http://localhost:5001/api/books', book)
-      .subscribe(
-        (data) => {
-          console.log('New book added:', data);
-        },
-        (error) => {
-          console.error('Error adding book:', error);
-        }
-      );
-  }
-  
 
   // Fetching books from a local source or service
-  /*getBooks(): void {
+  getBooks(): void {
     const storedBooks = localStorage.getItem('books');
     if (storedBooks) {
       this.books = JSON.parse(storedBooks);
     }
-  }*/
+  }
 
   // Search for books using Open Library API
   searchBooks(): void {
+    this.loading = true;
+      this.errorMessage = '';
+      this.searchResults = [];
     if (!this.searchQuery) {
       this.errorMessage = 'Please enter a search query.';
       return; // If the search query is empty, show an error message
+      
     }
 
     this.loading = true; // Start loading
