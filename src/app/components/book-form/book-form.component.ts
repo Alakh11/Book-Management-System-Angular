@@ -10,6 +10,7 @@ import { Book } from 'src/app/models/book.model';
   styleUrls: ['./book-form.component.css']
 })
 
+
 export class BookFormComponent implements OnInit {
   bookForm: FormGroup;
   message: string = '';
@@ -17,8 +18,13 @@ export class BookFormComponent implements OnInit {
   searchResults: any[] = []; // Store search results
   //book: Book = { id: 0, title: '', author: '', genre: '', publishedYear: '', isbn: ''}; 
   editingBookId: number | null = null; // Track the ID of the book being edited
-  book = { id: '', title: '', author: '', category: '' };
-
+  book = {
+    title: '',
+    author: '',
+    genre: '',
+    publishedYear: '',
+    isbn: ''
+  };
 
   constructor(private fb: FormBuilder, private bookService: BookService) {
     // Adding validators for required fields
@@ -27,12 +33,42 @@ export class BookFormComponent implements OnInit {
       author: ['', Validators.required],
       genre: ['', Validators.required], 
       publishedYear: ['', [Validators.required]], 
-      isbn: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13)]]
+      isbn: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(11)]]
     });
   }
 
+
+  addBook() {
+    if (this.bookForm.valid) {
+    const bookData = {
+      title: this.bookForm.value.title,
+      author: this.bookForm.value.author, 
+      genre: this.bookForm.value.genre,   
+      publishedYear: this.bookForm.value.publishedYear,
+      isbn: this.bookForm.value.isbn
+    };
+    
+    this.bookService.addBook(bookData).subscribe({
+      next: (response) => {
+        console.log('Book added successfully:', response);
+        this.books.push(response); // Update local array with backend response
+        this.message = 'Book added successfully!';
+        this.bookForm.reset(); // Reset form after success
+        alert('Book added successfully!');
+      },
+      error: (err) => {
+        console.error('Error adding book:', err);
+        alert('Failed to add book. Please check the console for details.');
+      }
+    });
+  }else {
+    this.message = 'Please fill in all fields correctly.';
+  }
+}
+
   ngOnInit(): void {
     const storedBooks = localStorage.getItem('books');
+    this.loadBooksFromLocalStorage();
     if (storedBooks) {
       this.books = JSON.parse(storedBooks);
     }
@@ -50,37 +86,39 @@ export class BookFormComponent implements OnInit {
           });
         }
 
-submitForm() {
+submitForm()  {
   // Check if the form is valid before submitting
   if (this.bookForm.valid) {
-        
-          const newBook = { ...this.bookForm.value }; // Create a new book object
-          newBook.id = this.editingBookId !== null ? this.editingBookId : this.generateId(); // Use existing ID if editing
-
-          if (this.editingBookId !== null) {
-            // Update existing book
-            const index = this.books.findIndex(book => book.id === this.editingBookId);
-            if (index !== -1) {
-              this.books[index] = newBook; // Update the book in the array
-            } 
-            this.message = 'Book successfully updated!'; // Success message
-          } else {
-          this.books.push(newBook);  // Add the book to the local array for display
-          this.message = 'Book successfully added!'; // Success message
-            }
-    
-        
-        (error) => {
-           console.error('Error adding book:', error);
-           this.message = 'Failed to add the book. Please try again.'; // Error message
+    const bookData = {
+      title: this.bookForm.value.title,
+      author: this.bookForm.value.author,
+      genre: this.bookForm.value.genre,
+      publishedYear: this.bookForm.value.publishedYear,
+      isbn: this.bookForm.value.isbn
+    };
+    // Call the service to add the book
+    this.bookService.addBook(bookData).subscribe({
+      next: (response) => {
+        console.log('Book added successfully:', response);
+        this.books.push(response); // Update local array with backend response
+        this.saveBooksToLocalStorage(); // Save updated books to local storage
+        this.message = 'Book added successfully!';
+        this.bookForm.reset(); // Reset form after success
+      },
+      error: (err) => {
+        console.error('Error adding book:', err);
+        this.message = 'Failed to add the book. Please try again.';
       }
-      this.saveBooksToLocalStorage();  // Save to localStorage
-      this.bookForm.reset(); // Reset the form on success
-      this.editingBookId = null; // Reset editing ID
-     } else {
+    });
+  } else {
     // If the form is invalid, set error message
     this.message = 'Please fill in all fields correctly.';
   }
+}
+
+// Save the books array to localStorage
+saveBooksToLocalStorage() {
+  localStorage.setItem('books', JSON.stringify(this.books));
 }
 
  // Load books from local storage
@@ -95,7 +133,9 @@ submitForm() {
   searchBooks(query: string) {
     if (query) {
       this.bookService.searchBooks(query).subscribe(response => {
-       // this.searchResults = response.docs; // Assuming docs contains the array of books
+        console.log(response);
+        this.searchResults = response;
+        //this.searchResults = response.docs; // Assuming docs contains the array of books
       }, error => {
         console.error('Error searching books:', error);
         this.message = 'Failed to fetch search results. Please try again.';
@@ -120,12 +160,6 @@ submitForm() {
     this.saveBooksToLocalStorage(); // Save to local storage
     this.message = 'Book added from search results!'; // Success message
   }
-
-
-// Save the books array to localStorage
-saveBooksToLocalStorage() {
-  localStorage.setItem('books', JSON.stringify(this.books));
-}
   
 
 // Generate unique ID for books
@@ -135,7 +169,13 @@ private generateId(): number {
 
 // Edit a book
 editBook(book: Book) {
-  this.bookForm.patchValue(book); // Populate the form with the book data
+  this.bookForm.patchValue({
+    title: book.title,
+    author: book.author, 
+    genre: book.genre,   
+    publishedYear: book.publishedYear,
+    isbn: book.isbn
+  }); // Populate the form with the book data
   this.editingBookId = book.id; // Set the editing book ID
 }
 

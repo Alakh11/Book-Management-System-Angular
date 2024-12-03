@@ -44,14 +44,14 @@
 
     <div>
       <label for="publishedYear" class="block text-dark text-sm font-medium mb-1">Published Year</label>
-      <input id="publishedYear" formControlName="publishedYear" type="date" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Published Year" text="number"/>
+      <input id="publishedYear" formControlName="publishedYear" type="Year" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Published Year" text="number"/>
       <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-red-600 text-sm mt-1">Published Year is required and should be a valid date.</div>
     </div>
 
     <div>
       <label for="isbn" class="block text-dark text-sm font-medium mb-1">ISBN</label>
       <input id="isbn" formControlName="isbn" type="number" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "ISBN Number" text="text"/>
-      <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-red-600 text-sm mt-1">ISBN is required and should be between 10 and 13 characters.</div>
+      <div *ngIf="f['isbn'].errors && f['isbn'].touched" class="text-red-600 text-sm mt-1">ISBN is required and should be a valid number.</div>
     </div>
 
     <button type="submit" class="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-200 ease-in-out">Add Book</button>

@@ -11,12 +11,13 @@ export interface SearchResponse {
   num_found: number;
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = `${environment.apiBaseUrl}/books`;
- // private apiUrl = 'http://localhost:5001/api/books';
+ // private apiUrl = `${environment.apiBaseUrl}/books`; // Backend API endpoint
+   private apiUrl = 'http://localhost:5001/api/books';
   //private apiUrl = 'https://openlibrary.org/search.json';
 
   // Subject to manage local books in memory
@@ -25,54 +26,60 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-   // Method to fetch all books
-   getBooks(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
-  }
-
-  // Method to add a new book
-  addBook(book: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, book);
-  }
-
-  // Method to search books by a query
-  searchBooks(query: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/search?query=${query}`);
-  }
-/*
-  // Search books using Open Library API
-  searchBooks(query: string): Observable<SearchResponse> {
-    this.loadingSubject.next(true);
-    return this.http.get<SearchResponse>(`${this.apiUrl}?q=${encodeURIComponent(query)}`).pipe(
-      tap(() => this.loadingSubject.next(false)), // Stop loading on success
+  // Fetch all books from the backend
+  getBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(this.apiUrl).pipe(
       catchError(error => {
-        this.loadingSubject.next(false);
         console.error('Error fetching books:', error);
-        alert(`Error: ${error.message}`);
-        return of({ docs: [], num_found: 0 }); // Return a default value on error
+        return of([]); // Return an empty array on error
       })
     );
   }
 
-  // Get books from your local backend or in-memory
-  getBooks(): Observable<Book[]> {
-    return this.booksSubject.asObservable(); // For in-memory book management
+  // Add a new book
+  addBook(book: Partial<Book>): Observable<Book> {
+    return this.http.post<Book>(this.apiUrl, book).pipe(
+      tap(response => console.log('Book added:', response)),
+      catchError(error => {
+        console.error('Error adding book:', error);
+        throw error; // Propagate the error for further handling
+      })
+    );
   }
 
-  // Add a book to the in-memory collection or local backend
-  addBook(book: Book): void {
+  // Search books by query (if supported by the backend)
+  searchBooks(query: string): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/search?query=${query}`).pipe(
+      catchError(error => {
+        console.error('Error searching books:', error);
+        return of([]); // Return an empty array on error
+      })
+    );
+  }
+
+  // Delete a book by ID
+  deleteBook(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => console.log(`Book with ID ${id} deleted`)),
+      catchError(error => {
+        console.error(`Error deleting book with ID ${id}:`, error);
+        throw error; // Propagate the error for further handling
+      })
+    );
+  }
+
+  // In-memory book management for UI
+  getLocalBooks(): Observable<Book[]> {
+    return this.booksSubject.asObservable();
+  }
+
+  // Add a book to the in-memory collection
+  addLocalBook(book: Book): void {
     const currentBooks = this.booksSubject.value;
-    book.id = this.generateId(); // Generate unique ID
     this.booksSubject.next([...currentBooks, book]);
   }
-  */
-  // Delete a book from in-memory or local backend
-  deleteBook(id: number): void {
-    const currentBooks = this.booksSubject.value.filter(book => book.id !== id);
-    this.booksSubject.next(currentBooks);
-  }
 
-  // Generate unique ID for in-memory books
+  // Generate a unique ID for in-memory books
   private generateId(): number {
     const currentBooks = this.booksSubject.value;
     return currentBooks.length ? Math.max(...currentBooks.map(b => b.id)) + 1 : 1;
