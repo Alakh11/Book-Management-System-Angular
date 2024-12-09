@@ -17,7 +17,8 @@ export interface SearchResponse {
 })
 export class BookService {
  // private apiUrl = `${environment.apiBaseUrl}/books`; // Backend API endpoint
-   private apiUrl = 'http://localhost:5001/api/books';
+  private apiUrl = 'http://127.0.0.1:3000/books';
+  //private apiUrl = 'http://localhost:5001/api/books';
   //private apiUrl = 'https://openlibrary.org/search.json';
 
   // Subject to manage local books in memory
@@ -38,6 +39,7 @@ export class BookService {
 
   // Add a new book
   addBook(book: Partial<Book>): Observable<Book> {
+    const url = 'http://127.0.0.1:3000/books';
     return this.http.post<Book>(this.apiUrl, book).pipe(
       tap(response => console.log('Book added:', response)),
       catchError(error => {

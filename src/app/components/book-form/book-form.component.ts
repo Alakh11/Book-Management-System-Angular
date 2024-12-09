@@ -22,7 +22,7 @@ export class BookFormComponent implements OnInit {
     title: '',
     author: '',
     genre: '',
-    publishedYear: '',
+    publishedYear: 0,
     isbn: ''
   };
 
@@ -32,7 +32,7 @@ export class BookFormComponent implements OnInit {
       title: ['', Validators.required],
       author: ['', Validators.required],
       genre: ['', Validators.required], 
-      publishedYear: ['', [Validators.required]], 
+      publishedYear: [null, [Validators.required, Validators.pattern(/^\d+$/)]], 
       isbn: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(11)]]
     });
   }
@@ -43,9 +43,12 @@ export class BookFormComponent implements OnInit {
     const bookData = {
       title: this.bookForm.value.title,
       author: this.bookForm.value.author, 
-      genre: this.bookForm.value.genre,   
-      publishedYear: this.bookForm.value.publishedYear,
-      isbn: this.bookForm.value.isbn
+      genre: this.bookForm.value.genre,  
+      publishedYear: +this.bookForm.value.publishedYear, 
+     // publishedYear: this.bookForm.value.publishedYear,
+      isbn: this.bookForm.value.isbn,
+      authorId: +this.bookForm.value.author, // Ensure it matches the schema
+      categoryId: +this.bookForm.value.categoryId || null // Optional field
     };
     
     this.bookService.addBook(bookData).subscribe({
@@ -80,10 +83,19 @@ export class BookFormComponent implements OnInit {
          }
 
          onSubmit() {
-          this.bookService.addBook(this.book).subscribe(response => {
+          if (this.book && typeof this.book.publishedYear === 'string') {
+            this.book.publishedYear = Number(this.book.publishedYear);
+          }
+          this.bookService.addBook(this.book).subscribe(
+            response => {
             console.log('Book added:', response);
             // Handle response (e.g., show a success message)
-          });
+          },
+          error => {
+            console.error('Error adding book:', error);
+            // Handle error (e.g., show an error message)
+          }
+        );
         }
 
 submitForm()  {
@@ -96,6 +108,7 @@ submitForm()  {
       publishedYear: this.bookForm.value.publishedYear,
       isbn: this.bookForm.value.isbn
     };
+    bookData.publishedYear = Number(bookData.publishedYear);
     // Call the service to add the book
     this.bookService.addBook(bookData).subscribe({
       next: (response) => {

@@ -44,7 +44,7 @@
 
     <div>
       <label for="publishedYear" class="block text-dark text-sm font-medium mb-1">Published Year</label>
-      <input id="publishedYear" formControlName="publishedYear" type="Year" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Published Year" text="number"/>
+      <input id="publishedYear" formControlName="publishedYear" type="number" class="w-full px-4 py-3 border border-light rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300" placeholder= "Published Year" text="number"/>
       <div *ngIf="f['publishedYear'].errors && f['publishedYear'].touched" class="text-red-600 text-sm mt-1">Published Year is required and should be a valid date.</div>
     </div>
 
