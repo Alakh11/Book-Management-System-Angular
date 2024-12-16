@@ -62,7 +62,7 @@
   <ul *ngIf="books.length > 0" class="space-y-4">
     <li *ngFor="let book of books" class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
       <p><strong>Title:</strong> {{ book.title }}</p>
-      <p><strong>Author:</strong> {{ book.author }}</p>
+      <p><strong>Author:</strong> {{ book.author?.name || book.author || 'Unknown' }}</p>
       <p><strong>Genre:</strong> {{ book.genre }}</p>
       <p><strong>Published Year:</strong> {{ book.publishedYear }}</p>
       <p><strong>ISBN:</strong> {{ book.isbn }}</p>

@@ -32,7 +32,7 @@
     <ul class="space-y-4">
       <li *ngFor="let book of searchResults" class="p-4 border border-gray-400 rounded-lg bg-white shadow-sm">
         <p><strong>Title:</strong> {{ book.title }}</p>
-        <p><strong>Author(s):</strong> {{ book.author_name || 'Unknown' }}</p>
+        <p><strong>Author(s):</strong> {{ book.author?.name || 'Unknown' }}</p>
         <p><strong>Genre:</strong> {{ book.genre || 'Unknown' }}</p>
         <p><strong>Published Year:</strong> {{ book.first_publish_year || 'Unknown' }}</p>
         <p><strong>ISBN:</strong> {{ book.isbn || 'N/A' }}</p>
@@ -63,7 +63,7 @@
       <tbody>
         <tr *ngFor="let book of books" class="border-b border-light hover:bg-accent transition ease-in-out duration-150">
           <td class="p-4">{{ book.title }}</td>
-          <td class="p-4">{{ book.author }}</td>
+          <td class="p-4">{{ book.author?.name }}</td>
           <td class="p-4">{{ book.genre }}</td>
           <td class="p-4">{{ book.publishedYear || 'N/A' }}</td>
           <td class="p-4">{{ book.isbn || 'N/A' }}</td>

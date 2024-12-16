@@ -24,6 +24,10 @@ export class BookListComponent implements OnInit {
     this.bookService.getBooks().subscribe(data => {
       this.books = data;
     });
+    this.books = this.books.map(book => ({
+      ...book,
+      author: typeof book.author === 'string' ? { name: book.author } : book.author
+    }));
   }
 
   // Fetching books from a local source or service

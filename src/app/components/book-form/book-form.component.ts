@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookService } from 'src/app/services/book.service';
 import { BookSearchService } from 'src/app/services/book-search.service';
 import { Book } from 'src/app/models/book.model';
+import { Author } from 'src/app/models/author.model';
 
 @Component({
   selector: 'app-book-form',
@@ -16,15 +17,15 @@ export class BookFormComponent implements OnInit {
   message: string = '';
   books: Book[] = [];  // Store added books here
   searchResults: any[] = []; // Store search results
-  //book: Book = { id: 0, title: '', author: '', genre: '', publishedYear: '', isbn: ''}; 
   editingBookId: number | null = null; // Track the ID of the book being edited
   book = {
     title: '',
-    author: '',
+    author: { name: '' },
     genre: '',
     publishedYear: 0,
     isbn: ''
   };
+  author: Author[] = []; 
 
   constructor(private fb: FormBuilder, private bookService: BookService) {
     // Adding validators for required fields
@@ -45,12 +46,11 @@ export class BookFormComponent implements OnInit {
       author: this.bookForm.value.author, 
       genre: this.bookForm.value.genre,  
       publishedYear: +this.bookForm.value.publishedYear, 
-     // publishedYear: this.bookForm.value.publishedYear,
       isbn: this.bookForm.value.isbn,
-      authorId: +this.bookForm.value.author, // Ensure it matches the schema
-      categoryId: +this.bookForm.value.categoryId || null // Optional field
+      authorId: +this.bookForm.value.author,
+      categoryId: +this.bookForm.value.categoryId || null 
     };
-    
+    console.log('Book data before saving:', bookData); 
     this.bookService.addBook(bookData).subscribe({
       next: (response) => {
         console.log('Book added successfully:', response);
@@ -64,44 +64,54 @@ export class BookFormComponent implements OnInit {
         alert('Failed to add book. Please check the console for details.');
       }
     });
-  }else {
+  }
+  else 
+  {
     this.message = 'Please fill in all fields correctly.';
   }
 }
 
   ngOnInit(): void {
+    this.bookService.getAuthor().subscribe({
+      next: (response) => {
+        this.author = response;
+      },
+      error: (err) => {
+        console.error('Error fetching authors:', err);
+      }
+      })
     const storedBooks = localStorage.getItem('books');
     this.loadBooksFromLocalStorage();
+    
     if (storedBooks) {
       this.books = JSON.parse(storedBooks);
     }
-
   }
-        // Getter for easy access to form controls
-        get f() { 
-          return this.bookForm.controls;
-         }
+  // Getter for easy access to form controls
+  get f() 
+  { 
+    return this.bookForm.controls;
+  }
 
-         onSubmit() {
-          if (this.book && typeof this.book.publishedYear === 'string') {
-            this.book.publishedYear = Number(this.book.publishedYear);
-          }
-          this.bookService.addBook(this.book).subscribe(
-            response => {
-            console.log('Book added:', response);
-            // Handle response (e.g., show a success message)
-          },
-          error => {
-            console.error('Error adding book:', error);
-            // Handle error (e.g., show an error message)
-          }
-        );
-        }
+  onSubmit() 
+  {
+    if (this.book && typeof this.book.publishedYear === 'string') {
+      this.book.publishedYear = Number(this.book.publishedYear);
+    }
+      this.bookService.addBook(this.book).subscribe(
+      response => {
+      console.log('Book added:', response);
+      },
+      error => {
+      console.error('Error adding book:', error);
+      });
+  }
 
 submitForm()  {
   // Check if the form is valid before submitting
   if (this.bookForm.valid) {
     const bookData = {
+      id: this.generateId(),
       title: this.bookForm.value.title,
       author: this.bookForm.value.author,
       genre: this.bookForm.value.genre,

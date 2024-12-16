@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Book } from '../models/book.model';
 import { environment } from '../environements';
+import { Author } from '../models/author.model'; 
 
 export interface SearchResponse {
   docs: Book[];
@@ -35,6 +36,10 @@ export class BookService {
         return of([]); // Return an empty array on error
       })
     );
+  }
+
+  getAuthor(): Observable<Author[]> {
+    return this.http.get<Author[]>(this.apiUrl);
   }
 
   // Add a new book
